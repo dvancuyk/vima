@@ -1,0 +1,51 @@
+﻿<Window x:Class="vima.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:vima"
+        xmlns:models="clr-namespace:vima.ViewModels"
+        mc:Ignorable="d"
+        Title="ViMa - Video Mapper" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type models:MappingViewModel}">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{Binding Source}"></Label>
+                <Label> -></Label>
+                <TextBox Text="{Binding Desired}" Width="200" HorizontalAlignment="Stretch"></TextBox>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <Menu x:Name="Menu" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="190">
+                <MenuItem Header="_Add"/>
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Save"/>
+            </Menu>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ListBox ItemsSource="{Binding Mappings}" />
+                <!--<DataGrid ItemsSource="{Binding Mappings}" AutoGenerateColumns="false">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Original Name" Binding="{Binding Source}" ></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="New Name" Width="200">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Desired}" ></TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>-->
+                <MediaElement Grid.Column="1">
+
+                </MediaElement>
+            </Grid>
+        </StackPanel>
+
+    </Grid>
+</Window>
