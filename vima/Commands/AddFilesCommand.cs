@@ -8,7 +8,7 @@ namespace vima.Commands
     /// <summary>
     /// Encpaulsates operational commands for adding video files to a mapping source.
     ///  </summary>
-    public class AddVideoFilesCommand : RoutedUICommand, IRoutedCommand
+    public class AddVideoFilesCommand : SimpleCommand
     {
         #region : Members :
 
@@ -19,22 +19,15 @@ namespace vima.Commands
         #region : Constructors :
 
         public AddVideoFilesCommand(MappingsSourceViewModel receiver)
-            : base("Add Files", "Add Files", typeof(AddVideoFilesCommand), new InputGestureCollection
-            {
-                new KeyGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift)
-            })
         {
             _mappingsSource = receiver;
+            CanExecuteDelegate = (parameter) => _mappingsSource != null;
+            ExecuteDelegate = (parameter) => SelectFiles();
         }
 
         #endregion
 
-        public bool CanExecute(object parameter)
-        {
-            return _mappingsSource != null;
-        }
-
-        public void Execute(object parameter)
+        private void SelectFiles()
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -51,6 +44,8 @@ namespace vima.Commands
                 }
             }
         }
+
+        public event EventHandler CanExecuteChanged;
 
         public void CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
