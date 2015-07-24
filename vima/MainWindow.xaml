@@ -8,13 +8,20 @@
         mc:Ignorable="d"
         Title="ViMa - Video Mapper" Height="400" Width="900">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type models:MappingViewModel}">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="{Binding Source}"></Label>
-                <Label>-></Label>
-                <TextBox Text="{Binding Desired}" Width="300" HorizontalAlignment="Stretch"></TextBox>
-            </StackPanel>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml"/>
+                <ResourceDictionary Source="Resources/Templates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type models:MappingViewModel}">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding Source}"></Label>
+                    <Label>-></Label>
+                    <TextBox Text="{Binding Desired}" Width="300" HorizontalAlignment="Stretch"></TextBox>
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <StackPanel>
@@ -41,7 +48,7 @@
                     </Button.RenderTransform>
                 </Button>
             </WrapPanel>
-            <Grid Height="250">
+            <Grid Height="250" RenderTransformOrigin="0.658,0.473">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="401*"></ColumnDefinition>
                     <ColumnDefinition Width="45*"/>
@@ -52,16 +59,31 @@
                 </Grid.RowDefinitions>
                 <ListBox ItemsSource="{Binding Mappings}"
                          SelectionChanged="SetCurrentMedia" Grid.ColumnSpan="2" Margin="0,0,0.4,-0.4" />
-                <MediaElement Grid.ZIndex="0" x:Name="CurrentPreview" 
-                              Grid.Column="1"
+                <Grid x:Name="MediaContainer" Grid.Column="1" Grid.ColumnSpan="2" Margin="0.4,0,9.6,-0.4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <MediaElement Grid.ZIndex="0" x:Name="CurrentPreview" 
                               MediaOpened="PreviewContentLoaded"
                               LoadedBehavior="Manual"
                               ScrubbingEnabled="True"
-                              MouseLeftButtonDown="ChangePreviewContentViewingState"
                               Source="{Binding CurrentSelection.FullPath}" Grid.ColumnSpan="2" Margin="44.6,0,-0.4,-0.4">
 
-                </MediaElement>
+                    </MediaElement>
+                    <Border Grid.Row="1"  CornerRadius="5,5,5,5" Background="WhiteSmoke" BorderBrush="Gray" BorderThickness="4,4,4,4" Margin="50,5,0,5">
+                        <StackPanel Background="Transparent" Width="Auto" Margin="10,0,-11.6,0.4" Orientation="Horizontal" Height="Auto">
+                            <Button x:Name="btnPlay" Click="PlayCurrentVideo" Width="50" Height="50" Margin="10,-30,0,0" Template="{StaticResource controlButtonTemplate}" FontSize="14" FontWeight="Bold" Foreground="LightGreen" Content="4" FontFamily="Webdings" ToolTip="Play"></Button>
+                            <Button x:Name="btnPause" Click="PauseCurrentVideo"  Width="40" Height="40" Margin="-15,-50,0,0" Template="{StaticResource controlButtonTemplate}" FontSize="14" FontWeight="Bold" Foreground="Orange" Content=";" FontFamily="Webdings" ToolTip="Pause"></Button>
+                            <Button x:Name="btnStop" Click="StopCurrentVideo"  Width="30" Height="30" Margin="-10,-45,0,0" Template="{StaticResource controlButtonTemplate}" FontSize="14" FontWeight="Bold" Foreground="Yellow" Content="&lt;" FontFamily="Webdings" ToolTip="Stop"></Button>
+                            <!-- Seek Control -->
+                            <TextBlock Foreground="Gray" Margin="-10,5,5,5"  VerticalAlignment="Center" FontSize="10">Seek To</TextBlock>
+                            <Slider Name="sliderTime" Margin="2,0,0,-0.4" VerticalAlignment="Center" ValueChanged="SeekToMediaPosition" Width="140" Height="Auto" />
+                            <!-- Volume Control -->
 
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </StackPanel>
 

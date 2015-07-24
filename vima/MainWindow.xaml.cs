@@ -75,21 +75,38 @@ namespace vima
             CurrentPreview.Position = new TimeSpan(0, 0, 5);
             CurrentPreview.Play();
             CurrentPreview.Pause();
+
+            sliderTime.Maximum = CurrentPreview.NaturalDuration.TimeSpan.TotalMilliseconds;
+            sliderTime.Value = 0;
+            sliderTime.IsEnabled = CurrentPreview.IsLoaded;
+            MediaContainer.Visibility = Visibility.Visible;
         }
 
-        public void ChangePreviewContentViewingState(object sender, RoutedEventArgs arguments)
+        #region : Playback Functionality :
+
+        private void PlayCurrentVideo(object sender, RoutedEventArgs e)
         {
-            if (_isPlaying)
-            {
-                _isPlaying = false;
-                CurrentPreview.Pause();
-                return;
-            }
-
-            _isPlaying = true;
             CurrentPreview.Play();
-            
         }
+
+        private void PauseCurrentVideo(object sender, RoutedEventArgs e)
+        {
+            CurrentPreview.Pause();
+        }
+
+        private void StopCurrentVideo(object sender, RoutedEventArgs e)
+        {
+            CurrentPreview.Stop();
+        }
+
+        private void SeekToMediaPosition(object sender, RoutedPropertyChangedEventArgs<double> args)
+        {
+            // Overloaded constructor takes the arguments days, hours, minutes, seconds, miniseconds.
+            // Create a TimeSpan with miliseconds equal to the slider value.
+            CurrentPreview.Position = new TimeSpan(0, 0, 0, 0, (int)sliderTime.Value);
+        }
+
+        #endregion
 
         #endregion
 
@@ -97,6 +114,7 @@ namespace vima
 
         private void LoadSource(MappingsSourceViewModel source)
         {
+            MediaContainer.Visibility = Visibility.Hidden;
             _current = source;
             DataContext = _current;
 
