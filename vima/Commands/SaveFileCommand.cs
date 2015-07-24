@@ -1,14 +1,12 @@
-﻿using System;
+﻿using System.Linq;
 using System.Windows.Input;
 using Microsoft.Win32;
+using vima.domain;
 using vima.ViewModels;
 
 namespace vima.Commands
 {
-    /// <summary>
-    /// Encpaulsates operational commands for adding video files to a mapping source.
-    ///  </summary>
-    public class AddVideoFilesCommand : RoutedUICommand, IRoutedCommand
+    public class SaveFileCommand : RoutedUICommand, IRoutedCommand
     {
         #region : Members :
 
@@ -18,10 +16,10 @@ namespace vima.Commands
 
         #region : Constructors :
 
-        public AddVideoFilesCommand(MappingsSourceViewModel receiver)
-            : base("Add Files", "Add Files", typeof(AddVideoFilesCommand), new InputGestureCollection
+        public SaveFileCommand(MappingsSourceViewModel receiver)
+            : base("Save File", "Save File", typeof(AddVideoFilesCommand), new InputGestureCollection
             {
-                new KeyGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift)
+                new KeyGesture(Key.S, ModifierKeys.Control)
             })
         {
             _mappingsSource = receiver;
@@ -36,20 +34,27 @@ namespace vima.Commands
 
         public void Execute(object parameter)
         {
-            var openFileDialog = new OpenFileDialog
+            if (!string.IsNullOrEmpty(_mappingsSource.FileName))
             {
-                Filter = "MP4 files (*.mp4)|*.mp4|AVI files (*.avi)|*.avi",
-                Multiselect = true
-
+                Publish();
+                return;
+            }
+            var openFileDialog = new SaveFileDialog
+            {
+                Filter = "Text files (*.txt)|*.txt"
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (var fileName in openFileDialog.FileNames)
-                {
-                    _mappingsSource.Mappings.Add(new MappingViewModel(fileName));
-                }
+                _mappingsSource.FileName = openFileDialog.FileName;
+                Publish();
             }
+        }
+
+        private void Publish()
+        {
+            var publisher = new MappingSourcePublisher();
+            publisher.Publish(_mappingsSource.ToDomainEntity());
         }
 
         public void CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -59,7 +64,7 @@ namespace vima.Commands
 
         public void Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            
+
         }
     }
 }

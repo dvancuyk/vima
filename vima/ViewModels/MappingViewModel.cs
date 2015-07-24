@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using vima.Annotations;
+using vima.domain;
 
 namespace vima.ViewModels
 {
@@ -39,7 +40,7 @@ namespace vima.ViewModels
             get { return _desired; }
             set
             {
-                if (!_desired.Equals(value, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.IsNullOrEmpty(_desired) && !string.IsNullOrEmpty(value) && !_desired.Equals(value, StringComparison.CurrentCultureIgnoreCase))
                 {
                     OnPropertyChanged();
                 }
@@ -51,6 +52,11 @@ namespace vima.ViewModels
         #endregion
 
         #region : Methods :
+        
+        public void Select()
+        {
+            DomainEvents.Raise(new MappingViewSelected(this));
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

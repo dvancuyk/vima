@@ -6,44 +6,62 @@
         xmlns:local="clr-namespace:vima"
         xmlns:models="clr-namespace:vima.ViewModels"
         mc:Ignorable="d"
-        Title="ViMa - Video Mapper" Height="350" Width="525">
+        Title="ViMa - Video Mapper" Height="400" Width="900">
     <Window.Resources>
         <DataTemplate DataType="{x:Type models:MappingViewModel}">
             <StackPanel Orientation="Horizontal">
                 <Label Content="{Binding Source}"></Label>
-                <Label> -></Label>
-                <TextBox Text="{Binding Desired}" Width="200" HorizontalAlignment="Stretch"></TextBox>
+                <Label>-></Label>
+                <TextBox Text="{Binding Desired}" Width="300" HorizontalAlignment="Stretch"></TextBox>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
     <Grid>
         <StackPanel>
             <Menu x:Name="Menu" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="190">
-                <MenuItem Header="_Add" Command="{Binding AddFilesCommand}"/>
-                <MenuItem Header="_Open" />
-                <MenuItem Header="_Save"/>
+                <MenuItem x:Name="AddFilesMenuItem"  Header="_Add" 
+                          Click="AddFiles" IsEnabled="False" />
+                <MenuItem Header="_Open" Click="OpenFile" />
+                <MenuItem x:Name="SaveFilesMenuItem" Header="_Save" 
+                          Click="SaveMappingsFile" IsEnabled="True"/>
+                <MenuItem x:Name="ConvertFilesMenuItem" Header="_Convert"
+                          Click="ConvertFiles" IsEnabled="True"/>
             </Menu>
-            <Grid>
+            <WrapPanel>
+                <Label>Destination</Label>
+                <TextBox Text="{Binding DestinationPath}"  Width="757"></TextBox>
+                <Button Click="SelectFolder" Width="50" Content="..." RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+            </WrapPanel>
+            <Grid Height="250">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="401*"></ColumnDefinition>
+                    <ColumnDefinition Width="45*"/>
+                    <ColumnDefinition Width="447*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ListBox ItemsSource="{Binding Mappings}" />
-                <!--<DataGrid ItemsSource="{Binding Mappings}" AutoGenerateColumns="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Original Name" Binding="{Binding Source}" ></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="New Name" Width="200">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Desired}" ></TextBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>-->
-                <MediaElement Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox ItemsSource="{Binding Mappings}"
+                         SelectionChanged="SetCurrentMedia" Grid.ColumnSpan="2" Margin="0,0,0.4,-0.4" />
+                <MediaElement Grid.ZIndex="0" x:Name="CurrentPreview" 
+                              Grid.Column="1"
+                              MediaOpened="PreviewContentLoaded"
+                              LoadedBehavior="Manual"
+                              ScrubbingEnabled="True"
+                              MouseLeftButtonDown="ChangePreviewContentViewingState"
+                              Source="{Binding CurrentSelection.FullPath}" Grid.ColumnSpan="2" Margin="44.6,0,-0.4,-0.4">
 
                 </MediaElement>
+
             </Grid>
         </StackPanel>
 

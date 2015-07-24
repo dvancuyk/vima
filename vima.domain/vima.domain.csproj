@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainEvents.cs" />
+    <Compile Include="IDomainEvent.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ISourceTranslator.cs" />
     <Compile Include="Mapper.cs" />
