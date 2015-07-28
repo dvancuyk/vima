@@ -59,16 +59,17 @@ namespace vima.domain
             get { return _desiredName; }
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    value = value.Replace(Location, string.Empty).Trim();
+                    value = Path.GetFileNameWithoutExtension(value);
+                    if (value.StartsWith("\\")) value = value.Substring(1);
                 }
 
                 _desiredName = value;
             }
         }
 
-        public bool HasNewName => !string.IsNullOrEmpty(DesiredName);
+        public bool HasNewName => !string.IsNullOrWhiteSpace(DesiredName);
 
         #endregion
 

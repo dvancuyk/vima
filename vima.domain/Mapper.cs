@@ -38,7 +38,7 @@ namespace vima.domain
         {
             MappedFiles = 0;
 
-            foreach (var mapping in source.Mappings.Where(m => m.HasNewName && File.Exists(m.SourceName))
+            foreach (var mapping in source.Mappings.Where(m => m.HasNewName && File.Exists(m.GetOriginalFileName()))
                 .Select(GetFileInfo))
             {
                 File.Move(mapping.Source, mapping.Destination);

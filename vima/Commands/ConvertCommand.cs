@@ -16,7 +16,7 @@ namespace vima.Commands
         #region : Constructors :
 
         public ConvertCommand(MappingsSourceViewModel receiver)
-            : base("Add Files", "Add Files", typeof (AddVideoFilesCommand), new InputGestureCollection
+            : base("Convert Files", "Convert Files", typeof (ConvertCommand), new InputGestureCollection
             {
                 new KeyGesture(Key.C, ModifierKeys.Control | ModifierKeys.Alt)
             })
