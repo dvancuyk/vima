@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Microsoft.Win32;
 using vima.Commands;
 using vima.ViewModels;
 
@@ -65,9 +63,15 @@ namespace vima
         
         public void SetCurrentMedia(object sender, SelectionChangedEventArgs arguments)
         {
-            _current.CurrentSelection = arguments.AddedItems[0] as MappingViewModel;
-            CurrentPreview.Pause();
-
+            if (CurrentPreview.HasVideo)
+            {
+                CurrentPreview.Close();
+            }
+            if (arguments.AddedItems.Count > 0)
+            {
+                _current.CurrentSelection = arguments.AddedItems[0] as MappingViewModel;
+                CurrentPreview.Pause();
+            }
         }
 
         public void PreviewContentLoaded(object sender, RoutedEventArgs arguments)
@@ -115,6 +119,10 @@ namespace vima
         private void LoadSource(MappingsSourceViewModel source)
         {
             MediaContainer.Visibility = Visibility.Hidden;
+
+            if (source == null)
+                return;
+
             _current = source;
             DataContext = _current;
 

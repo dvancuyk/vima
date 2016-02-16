@@ -10,16 +10,16 @@ namespace vima.domain
     {
         #region : Members :
 
-        private readonly List<Mapping> _mappings; 
+        private readonly List<Mapping> _mappings;
 
         #endregion
-        
+
         #region : Constructors :
 
         private MappingsSource(string fileName)
         {
             Condition.Requires(fileName, "fileName").IsNotNullOrEmpty();
-            
+
             FullName = fileName;
             Name = Path.GetFileNameWithoutExtension(fileName);
             Location = Path.GetDirectoryName(fileName);
@@ -41,10 +41,8 @@ namespace vima.domain
         {
             Condition.Requires(mappings, "mappings").IsNotNull();
 
-            if (mappings.HasElements())
-            {
-                _mappings.AddRange(mappings);
-            }
+            _mappings.AddRange(mappings.OrderBy(m => m.SourceName));
+
         }
 
         #endregion

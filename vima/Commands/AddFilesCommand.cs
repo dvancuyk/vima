@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using Microsoft.Win32;
 using vima.ViewModels;
 
@@ -47,6 +50,9 @@ namespace vima.Commands
             {
                 foreach (var fileName in openFileDialog.FileNames)
                 {
+                    if (_mappingsSource.Mappings.Any(mapping => mapping.FullPath.Trim().Equals(fileName, StringComparison.CurrentCultureIgnoreCase)))
+                        continue;
+
                     _mappingsSource.Mappings.Add(new MappingViewModel(fileName));
                 }
             }
@@ -59,7 +65,7 @@ namespace vima.Commands
 
         public void Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            
+
         }
     }
 }

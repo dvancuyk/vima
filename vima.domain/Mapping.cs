@@ -63,9 +63,11 @@ namespace vima.domain
                 {
                     value = Path.GetFileNameWithoutExtension(value);
                     if (value.StartsWith("\\")) value = value.Substring(1);
+                    
                 }
+                else value = string.Empty;
 
-                _desiredName = value;
+                _desiredName = value.Trim();
             }
         }
 
